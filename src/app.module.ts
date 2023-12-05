@@ -4,9 +4,17 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
-import { UserEntity } from './users/users.entity';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
+import { QuestionnairesController } from './questionnaires/questionnaires.controller';
+import { QuestionsController } from './questions/questions.controller';
+import { QuestionItemsController } from './question-items/question-items.controller';
+import { AnswersController } from './answers/answers.controller';
+import { AnswerHistoriesController } from './answer-histories/answer-histories.controller';
+import { QuestionnaireEntity } from './questionnaires/questionnaires.entity';
+import { QuestionEntity } from './questions/questions.entity';
+import { QuestionItemEntity } from './question-items/question-items.entity';
+import { AnswerEntity } from './answers/answers.entity';
+import { AnswerHistoryEntity } from './answer-histories/answer-histories.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -19,7 +27,13 @@ const typeOrmModuleOptions = {
     username: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_NAME'),
-    entities: [UserEntity],
+    entities: [
+      QuestionnaireEntity,
+      QuestionEntity,
+      QuestionItemEntity,
+      AnswerEntity,
+      AnswerHistoryEntity,
+    ],
     synchronize: true, // TODO: production에서는 false로 바꾸기
     autoLoadEntities: true,
     logging: true,
@@ -49,7 +63,14 @@ const typeOrmModuleOptions = {
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
   ],
-  controllers: [AppController, UsersController],
+  controllers: [
+    AppController,
+    QuestionnairesController,
+    QuestionsController,
+    QuestionItemsController,
+    AnswersController,
+    AnswerHistoriesController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}
