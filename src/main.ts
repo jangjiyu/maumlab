@@ -5,6 +5,6 @@ import { HttpApiExceptionFilter } from './common/exceptions/http-api-exception.f
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpApiExceptionFilter());
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
