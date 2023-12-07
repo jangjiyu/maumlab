@@ -4,13 +4,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsUUID } from 'class-validator';
+import { IsNumber } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 export abstract class CommonEntity {
-  @IsUUID()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @IsNumber()
+  @PrimaryGeneratedColumn({ type: 'int' })
+  id: number;
 
   // DB SQL QUERY : set time zone 'Asia/Seoul'; set time zone 'UTC'; show timezone;
   @CreateDateColumn({

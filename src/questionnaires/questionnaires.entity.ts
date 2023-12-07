@@ -21,9 +21,8 @@ export class QuestionnaireEntity extends CommonEntity {
   description: string;
 
   @IsBoolean()
-  @IsNotEmpty({ message: '복수 선택 가능 여부를 입력해주세요.' })
-  @Column({ type: 'varchar', nullable: false })
-  isMultipleChoiceQuestion: boolean;
+  @Column({ type: 'boolean', default: false })
+  isCompleted: boolean;
 
   @OneToMany(
     () => QuestionEntity,
@@ -42,7 +41,7 @@ export class QuestionnaireEntity extends CommonEntity {
 
   @OneToMany(
     () => AnswerHistoryEntity,
-    (answer: AnswerHistoryEntity) => answer.questionnaire,
+    (answerHistory: AnswerHistoryEntity) => answerHistory.questionnaire,
   )
   answerHistories: AnswerHistoryEntity[];
 }

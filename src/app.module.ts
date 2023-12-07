@@ -5,11 +5,10 @@ import * as Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { QuestionnairesController } from './questionnaires/questionnaires.controller';
-import { QuestionsController } from './questions/questions.controller';
-import { QuestionItemsController } from './question-items/question-items.controller';
-import { AnswersController } from './answers/answers.controller';
-import { AnswerHistoriesController } from './answer-histories/answer-histories.controller';
+import { QuestionnairesModule } from './questionnaires/questionnaires.module';
+import { QuestionsModule } from './questions/questions.module';
+import { QuestionItemsModule } from './question-items/question-items.module';
+import { AnswersModule } from './answers/answers.module';
 import { QuestionnaireEntity } from './questionnaires/questionnaires.entity';
 import { QuestionEntity } from './questions/questions.entity';
 import { QuestionItemEntity } from './question-items/question-items.entity';
@@ -62,15 +61,12 @@ const typeOrmModuleOptions = {
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
+    QuestionnairesModule,
+    QuestionsModule,
+    QuestionItemsModule,
+    AnswersModule,
   ],
-  controllers: [
-    AppController,
-    QuestionnairesController,
-    QuestionsController,
-    QuestionItemsController,
-    AnswersController,
-    AnswerHistoriesController,
-  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { CommonEntity } from '../common/entities/common.entity';
 import { Column, Entity, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 import { QuestionnaireEntity } from '../questionnaires/questionnaires.entity';
@@ -24,7 +24,15 @@ export class QuestionItemEntity extends CommonEntity {
   @Column({ type: 'integer', nullable: false })
   score: number;
 
-  @OneToMany(() => AnswerEntity, (answer: AnswerEntity) => answer.questionnaire)
+  @IsBoolean()
+  @Column({ type: 'boolean', nullable: true, default: false })
+  isSkipLogicItem: boolean;
+
+  @IsNumber()
+  @Column({ type: 'integer', nullable: true })
+  orderIndexToSkip: number;
+
+  @OneToMany(() => AnswerEntity, (answer: AnswerEntity) => answer.questionItem)
   answers: AnswerEntity[];
 
   @ManyToOne(
@@ -32,6 +40,7 @@ export class QuestionItemEntity extends CommonEntity {
     (questionnaire: QuestionnaireEntity) => questionnaire.questionItems,
     {
       onDelete: 'CASCADE',
+      eager: true,
     },
   )
   @JoinColumn([
@@ -47,6 +56,7 @@ export class QuestionItemEntity extends CommonEntity {
     (question: QuestionEntity) => question.questionItems,
     {
       onDelete: 'CASCADE',
+      eager: true,
     },
   )
   @JoinColumn([

@@ -15,25 +15,30 @@ export class QuestionnairesRepository {
   }
 
   async findById(id) {
-    return await this.Questionnaire.findOne(id);
+    return await this.Questionnaire.findOne({
+      where: { id },
+    });
   }
 
-  async create(createQuestionNaireDto) {
+  async findByIdWithAnswerHistory(id) {
+    return await this.Questionnaire.findOne({
+      where: { id },
+      relations: ['answerHistories'],
+    });
+  }
+
+  async create(body) {
     const questionNaire = new QuestionnaireEntity();
-    questionNaire.title = createQuestionNaireDto.title;
-    questionNaire.description = createQuestionNaireDto.description;
-    questionNaire.isMultipleChoiceQuestion =
-      createQuestionNaireDto.isMultipleChoiceQuestion;
+    questionNaire.title = body.title;
+    questionNaire.description = body.description;
 
     return await this.Questionnaire.save(questionNaire);
   }
 
-  async update(id, updateQuestionNaireDto) {
-    const questionNaire = await this.Questionnaire.findOne(id);
-    questionNaire.title = updateQuestionNaireDto.title;
-    questionNaire.description = updateQuestionNaireDto.description;
-    questionNaire.isMultipleChoiceQuestion =
-      updateQuestionNaireDto.isMultipleChoiceQuestion;
+  async update(id, body) {
+    const questionNaire = await this.Questionnaire.findOne({ where: { id } });
+    questionNaire.title = body.title;
+    questionNaire.description = body.description;
 
     return await this.Questionnaire.save(questionNaire);
   }

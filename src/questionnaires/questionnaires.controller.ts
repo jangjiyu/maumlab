@@ -7,38 +7,47 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { QuestionNairesService } from './questionnaires.service';
-import { CreateQuestionNaireDto } from './dto/create.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { QuestionnairesService } from './questionnaires.service';
+import { QuestionnaireDto } from './dto/questionnaire.dto';
 
+@ApiTags('Questionnaires')
 @Controller('questionnaires')
 export class QuestionnairesController {
-  constructor(private readonly questionNairesService: QuestionNairesService) {}
+  constructor(private readonly questionnairesService: QuestionnairesService) {}
 
   @Get()
   getAll() {
-    return this.questionNairesService.getAll();
+    return this.questionnairesService.getAll();
   }
 
   @Get(':id')
   getOne(@Param('id') id: string) {
-    return this.questionNairesService.getOne(id);
+    return this.questionnairesService.getOne(id);
   }
 
   @Post()
-  create(@Body() createQuestionNaireDto: CreateQuestionNaireDto) {
-    return this.questionNairesService.create(createQuestionNaireDto);
+  create(@Body() body: QuestionnaireDto) {
+    this.questionnairesService.create(body);
+    return 'ok';
   }
 
   @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateQuestionNaireDto: CreateQuestionNaireDto,
-  ) {
-    return this.questionNairesService.update(id, updateQuestionNaireDto);
+  update(@Param('id') id: string, @Body() body: QuestionnaireDto) {
+    this.questionnairesService.update(id, body);
+    return 'ok';
+  }
+
+  // TODO: 설문지 완성 시, 설문지 완성 처리
+  @Post(':id')
+  complete(@Param('id') id: string) {
+    // this.questionnairesService.complete(id)
+    return 'ok';
   }
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.questionNairesService.delete(id);
+    this.questionnairesService.delete(id);
+    return 'ok';
   }
 }

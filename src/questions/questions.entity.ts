@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { CommonEntity } from '../common/entities/common.entity';
 import { Column, Entity, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 import { QuestionnaireEntity } from '../questionnaires/questionnaires.entity';
@@ -19,13 +19,10 @@ export class QuestionEntity extends CommonEntity {
   @Column({ type: 'varchar', nullable: false })
   questionName: string;
 
-  @IsNumber()
-  @Column({ type: 'integer', nullable: true })
-  skipLogicItem: number;
-
-  @IsNumber()
-  @Column({ type: 'integer', nullable: true })
-  questionToSkip: string;
+  @IsBoolean()
+  @IsNotEmpty({ message: '복수 선택 가능 여부를 입력해주세요.' })
+  @Column({ type: 'boolean', nullable: false })
+  isMultipleChoiceQuestion: boolean;
 
   @OneToMany(
     () => QuestionItemEntity,
@@ -33,7 +30,7 @@ export class QuestionEntity extends CommonEntity {
   )
   questionItems: QuestionItemEntity[];
 
-  @OneToMany(() => AnswerEntity, (answer: AnswerEntity) => answer.questionnaire)
+  @OneToMany(() => AnswerEntity, (answer: AnswerEntity) => answer.question)
   answers: AnswerEntity[];
 
   @ManyToOne(
@@ -41,6 +38,7 @@ export class QuestionEntity extends CommonEntity {
     (questionnaire: QuestionnaireEntity) => questionnaire.questions,
     {
       onDelete: 'CASCADE',
+      eager: true,
     },
   )
   @JoinColumn([
